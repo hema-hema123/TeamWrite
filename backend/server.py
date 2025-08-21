@@ -34,6 +34,9 @@ app = FastAPI()
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+@app.get("/")
+def read_root():
+    return {"message": "Backend is running!"}
 # Security
 security = HTTPBearer()
 
