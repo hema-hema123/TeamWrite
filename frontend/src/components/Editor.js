@@ -158,6 +158,16 @@ const Editor = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              <button 
+                onClick={() => navigate('/')}
+                className="flex items-center space-x-2 hover:opacity-80 transition-opacity mr-4"
+              >
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-lg font-bold text-slate-800">TeamWrite</span>
+              </button>
+
               <Button 
                 onClick={() => navigate('/dashboard')}
                 variant="outline"
@@ -165,7 +175,7 @@ const Editor = () => {
                 className="border-slate-300"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
+                Dashboard
               </Button>
               
               <div>
