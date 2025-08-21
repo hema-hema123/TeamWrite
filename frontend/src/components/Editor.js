@@ -152,9 +152,12 @@ const Editor = () => {
 
     // Update collaboration cursor provider
     if (editor) {
-      editor.extensionManager.extensions.find(
+      const collaborationCursorExt = editor.extensionManager.extensions.find(
         ext => ext.name === 'collaborationCursor'
-      )?.options.provider = wsProvider;
+      );
+      if (collaborationCursorExt) {
+        collaborationCursorExt.options.provider = wsProvider;
+      }
     }
 
     return () => {
