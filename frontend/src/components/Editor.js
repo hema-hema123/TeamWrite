@@ -236,87 +236,26 @@ const Editor = () => {
         </div>
       </header>
 
-      {/* Toolbar */}
-      {editor && (
-        <div className="bg-white border-b border-slate-200 px-4 py-2">
-          <div className="container mx-auto">
-            <div className="flex items-center space-x-1">
-              <Button
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                variant={editor.isActive('bold') ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
-                <Bold className="w-4 h-4" />
-              </Button>
-              
-              <Button
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-                variant={editor.isActive('italic') ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
-                <Italic className="w-4 h-4" />
-              </Button>
-              
-              <Button
-                onClick={() => editor.chain().focus().toggleStrike().run()}
-                variant={editor.isActive('strike') ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
-                <Underline className="w-4 h-4" />
-              </Button>
-
-              <div className="w-px h-6 bg-slate-300 mx-2"></div>
-
-              <Button
-                onClick={() => editor.chain().focus().toggleBulletList().run()}
-                variant={editor.isActive('bulletList') ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
-                <List className="w-4 h-4" />
-              </Button>
-              
-              <Button
-                onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                variant={editor.isActive('orderedList') ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
-                <ListOrdered className="w-4 h-4" />
-              </Button>
-
-              <Button
-                onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                variant={editor.isActive('blockquote') ? 'default' : 'ghost'}
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
-                <Quote className="w-4 h-4" />
-              </Button>
-
-              <Button
-                onClick={() => editor.chain().focus().setHorizontalRule().run()}
-                variant="ghost"
-                size="sm"
-                className="h-8 w-8 p-0"
-              >
-                <Minus className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Editor */}
       <main className="container mx-auto px-4 py-8">
         <Card className="bg-white min-h-[600px] shadow-sm">
-          <EditorContent 
-            editor={editor} 
-            className="p-8 min-h-[600px] focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-20 rounded-lg"
-          />
+          <div className="p-8">
+            <textarea
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+                // Broadcast content change to other users
+                if (wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+                  wsConnection.send(JSON.stringify({
+                    type: 'content_change',
+                    content: e.target.value
+                  }));
+                }
+              }}
+              className="w-full min-h-[500px] p-4 border-none resize-none focus:outline-none text-slate-700 text-lg leading-relaxed"
+              placeholder="Start typing your document..."
+            />
+          </div>
         </Card>
       </main>
 
