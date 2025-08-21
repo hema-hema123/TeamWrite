@@ -57,11 +57,8 @@ const Editor = () => {
 
   // Save document content
   const saveDocument = useCallback(async () => {
-    if (!editor) return;
-    
     setSaving(true);
     try {
-      const content = editor.getHTML();
       await axios.put(`/documents/${documentId}`, { content });
     } catch (error) {
       setError('Failed to save document');
@@ -69,7 +66,7 @@ const Editor = () => {
     } finally {
       setSaving(false);
     }
-  }, [editor, documentId]);
+  }, [content, documentId]);
 
   // Initialize WebSocket connection and Yjs provider
   useEffect(() => {
