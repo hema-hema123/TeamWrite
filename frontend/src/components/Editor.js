@@ -146,7 +146,9 @@ const Editor = () => {
       }
     };
 
-    wsProvider.ws?.addEventListener('message', handleMessage);
+    if (wsProvider.ws) {
+      wsProvider.ws.addEventListener('message', handleMessage);
+    }
 
     setProvider(wsProvider);
 
