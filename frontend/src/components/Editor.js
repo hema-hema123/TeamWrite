@@ -68,55 +68,48 @@ const Editor = () => {
     }
   }, [content, documentId]);
 
-  // Initialize WebSocket connection and Yjs provider
+  // Initialize WebSocket connection
   useEffect(() => {
     if (!user || !documentId) return;
 
     const token = localStorage.getItem('token');
     const wsUrl = process.env.REACT_APP_BACKEND_URL.replace('https://', 'wss://').replace('http://', 'ws://');
     
-    const wsProvider = new WebsocketProvider(
-      `${wsUrl}/ws/${documentId}?token=${token}`,
-      'document-room',
-      ydoc
-    );
+    const ws = new WebSocket(`${wsUrl}/ws/${documentId}?token=${token}`);
 
-    wsProvider.on('status', (event) => {
-      setConnected(event.status === 'connected');
-    });
+    ws.onopen = () => {
+      setConnected(true);
+      console.log('WebSocket connected');
+    };
 
-    // Listen for presence updates
-    const handleMessage = (event) => {
+    ws.onclose = () => {
+      setConnected(false);
+      console.log('WebSocket disconnected');
+    };
+
+    ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
         if (data.type === 'presence') {
           setOnlineUsers(data.users || []);
+        } else if (data.type === 'content_change') {
+          setContent(data.content);
         }
       } catch (e) {
-        // Handle non-JSON messages (Yjs sync messages)
+        console.log('Non-JSON message received:', event.data);
       }
     };
 
-    if (wsProvider.ws) {
-      wsProvider.ws.addEventListener('message', handleMessage);
-    }
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
 
-    setProvider(wsProvider);
-
-    // Update collaboration cursor provider
-    if (editor) {
-      const collaborationCursorExt = editor.extensionManager.extensions.find(
-        ext => ext.name === 'collaborationCursor'
-      );
-      if (collaborationCursorExt) {
-        collaborationCursorExt.options.provider = wsProvider;
-      }
-    }
+    setWsConnection(ws);
 
     return () => {
-      wsProvider.destroy();
+      ws.close();
     };
-  }, [user, documentId, ydoc, editor]);
+  }, [user, documentId]);
 
   // Auto-save on content change
   useEffect(() => {
