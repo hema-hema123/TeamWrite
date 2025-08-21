@@ -1,34 +1,235 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: #1f2937;
+  background-color: #f8fafc;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.App {
+  min-height: 100vh;
 }
 
-.App-link {
-    color: #61dafb;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Button hover effects */
+.btn-hover-scale {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-hover-scale:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styling */
+.form-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Editor specific styles */
+.ProseMirror {
+  outline: none;
+  padding: 1rem;
+  min-height: 400px;
+}
+
+.ProseMirror p {
+  margin: 0.5rem 0;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+
+.ProseMirror ul, .ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #d1d5db;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.ProseMirror code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', 'Consolas', monospace;
+}
+
+.ProseMirror pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.ProseMirror pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* Collaboration cursor styles */
+.collaboration-cursor__caret {
+  border-left: 2px solid #3b82f6;
+  border-right: 2px solid #3b82f6;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+
+.collaboration-cursor__label {
+  background-color: #3b82f6;
+  border-radius: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  left: -1px;
+  line-height: normal;
+  padding: 2px 6px;
+  position: absolute;
+  top: -20px;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* Loading states */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Status indicators */
+.status-online {
+  background-color: #10b981;
+}
+
+.status-offline {
+  background-color: #6b7280;
+}
+
+.status-typing {
+  background-color: #f59e0b;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .ProseMirror {
+    padding: 0.75rem;
+  }
+  
+  .ProseMirror h1 {
+    font-size: 1.5rem;
+  }
+  
+  .ProseMirror h2 {
+    font-size: 1.25rem;
+  }
+  
+  .ProseMirror h3 {
+    font-size: 1.125rem;
+  }
 }
