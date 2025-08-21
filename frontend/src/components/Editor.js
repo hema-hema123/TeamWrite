@@ -11,7 +11,8 @@ import {
   Users,
   Circle,
   Wifi,
-  WifiOff
+  WifiOff,
+  FileText
 } from 'lucide-react';
 
 const Editor = () => {
