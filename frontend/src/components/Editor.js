@@ -113,20 +113,15 @@ const Editor = () => {
 
   // Auto-save on content change
   useEffect(() => {
-    if (!editor) return;
-
-    const handleUpdate = () => {
-      // Debounced save (save after 2 seconds of inactivity)
-      clearTimeout(window.autoSaveTimeout);
-      window.autoSaveTimeout = setTimeout(saveDocument, 2000);
-    };
-
-    editor.on('update', handleUpdate);
+    if (!content || loading) return;
+    
+    // Debounced save (save after 2 seconds of inactivity)
+    const timeoutId = setTimeout(saveDocument, 2000);
+    
     return () => {
-      editor.off('update', handleUpdate);
-      clearTimeout(window.autoSaveTimeout);
+      clearTimeout(timeoutId);
     };
-  }, [editor, saveDocument]);
+  }, [content, saveDocument, loading]);
 
   // Load document on component mount
   useEffect(() => {
