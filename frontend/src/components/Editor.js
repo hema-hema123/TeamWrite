@@ -40,13 +40,7 @@ const Editor = () => {
     try {
       const response = await axios.get(`/documents/${documentId}`);
       setDocument(response.data);
-      
-      if (response.data.content) {
-        // Set initial content if available
-        editor?.commands.setContent(response.data.content);
-      } else {
-        editor?.commands.setContent('<p>Hello world! Start collaborating...</p>');
-      }
+      setContent(response.data.content || 'Hello world! Start collaborating...');
     } catch (error) {
       if (error.response?.status === 404) {
         setError('Document not found');
@@ -59,7 +53,7 @@ const Editor = () => {
     } finally {
       setLoading(false);
     }
-  }, [documentId, editor]);
+  }, [documentId]);
 
   // Save document content
   const saveDocument = useCallback(async () => {
