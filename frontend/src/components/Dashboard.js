@@ -144,6 +144,17 @@ const Dashboard = () => {
             </div>
             
             <div className="flex items-center space-x-4">
+              {/* Navigation Links */}
+              <div className="hidden md:flex items-center space-x-6 mr-6">
+                <button 
+                  onClick={() => navigate('/')}
+                  className="text-slate-600 hover:text-blue-600 font-medium transition-colors"
+                >
+                  Home
+                </button>
+                <span className="text-blue-600 font-medium">Dashboard</span>
+              </div>
+
               <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
                 <DialogTrigger asChild>
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white btn-hover-scale">
