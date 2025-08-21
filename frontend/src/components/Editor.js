@@ -7,13 +7,6 @@ import { Button } from './ui/button';
 import { Alert } from './ui/alert';
 import { 
   ArrowLeft, 
-  Bold, 
-  Italic, 
-  Underline,
-  List,
-  ListOrdered,
-  Quote,
-  Minus,
   Save,
   Users,
   Circle,
