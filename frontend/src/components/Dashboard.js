@@ -266,25 +266,58 @@ const Dashboard = () => {
               {documents.map((doc) => (
                 <Card 
                   key={doc.id} 
-                  className="p-6 bg-white card-hover cursor-pointer group"
+                  className="p-6 bg-white card-hover cursor-pointer group relative overflow-hidden"
                   onClick={() => navigate(`/editor/${doc.id}`)}
                 >
                   <div className="space-y-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors mb-2">
-                          {doc.title}
-                        </h3>
-                        <div className="flex items-center text-sm text-slate-600 space-x-4">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
+                            {doc.title}
+                          </h3>
+                          {doc.collaborators?.length > 1 && (
+                            <div className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs rounded-full font-medium">
+                              Shared
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center text-sm text-slate-600 space-x-4 mb-3">
                           <div className="flex items-center space-x-1">
                             <Calendar className="w-3 h-3" />
                             <span>{formatDate(doc.updated_at)}</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <Users className="w-3 h-3" />
-                            <span>{doc.collaborators?.length || 1}</span>
+                            <Users className="w-3 h-3 text-blue-600" />
+                            <span className="text-blue-600 font-medium">
+                              {doc.collaborators?.length || 1} collaborator{(doc.collaborators?.length || 1) !== 1 ? 's' : ''}
+                            </span>
                           </div>
                         </div>
+                        
+                        {/* Collaboration Avatars */}
+                        {doc.collaborators?.length > 1 && (
+                          <div className="flex items-center space-x-2 mb-2">
+                            <div className="flex -space-x-2">
+                              {doc.collaborators.slice(0, 3).map((collaboratorId, index) => (
+                                <div
+                                  key={collaboratorId}
+                                  className="w-6 h-6 rounded-full bg-blue-500 border-2 border-white flex items-center justify-center text-white text-xs font-medium"
+                                  title="Collaborator"
+                                >
+                                  {String.fromCharCode(65 + index)}
+                                </div>
+                              ))}
+                              {doc.collaborators.length > 3 && (
+                                <div className="w-6 h-6 rounded-full bg-slate-400 border-2 border-white flex items-center justify-center text-white text-xs">
+                                  +{doc.collaborators.length - 3}
+                                </div>
+                              )}
+                            </div>
+                            <span className="text-xs text-slate-500">Shared document</span>
+                          </div>
+                        )}
                       </div>
                       
                       {doc.created_by === user?.id && (
@@ -307,11 +340,16 @@ const Dashboard = () => {
                           <span>Modified {formatDate(doc.updated_at)}</span>
                         </div>
                         <div className="flex items-center space-x-1">
-                          <Edit3 className="w-3 h-3" />
-                          <span>Click to edit</span>
+                          <Edit3 className="w-3 h-3 text-emerald-600" />
+                          <span className="text-emerald-600 font-medium">Collaborate now</span>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  
+                  {/* Real-time indicator */}
+                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                   </div>
                 </Card>
               ))}
