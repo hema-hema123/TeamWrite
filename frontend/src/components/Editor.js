@@ -21,15 +21,6 @@ import {
   WifiOff
 } from 'lucide-react';
 
-// Random colors for collaboration cursors
-const getRandomColor = () => {
-  const colors = [
-    '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-    '#DDA0DD', '#FF7F50', '#87CEEB', '#DEB887', '#F0E68C'
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-};
-
 const Editor = () => {
   const { documentId } = useParams();
   const navigate = useNavigate();
@@ -39,35 +30,10 @@ const Editor = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [content, setContent] = useState('');
   const [connected, setConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [ydoc] = useState(() => new Y.Doc());
-  const [provider, setProvider] = useState(null);
-
-  // Initialize editor
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        history: false, // Disable history for collaboration
-      }),
-      Collaboration.configure({
-        document: ydoc,
-      }),
-      CollaborationCursor.configure({
-        provider: null, // Will be set later
-        user: {
-          name: user?.username || 'Anonymous',
-          color: getRandomColor(),
-        },
-      }),
-    ],
-    content: '<p>Loading document...</p>',
-    editorProps: {
-      attributes: {
-        class: 'prose prose-slate max-w-none focus:outline-none',
-      },
-    },
-  });
+  const [wsConnection, setWsConnection] = useState(null);
 
   // Fetch document data
   const fetchDocument = useCallback(async () => {
